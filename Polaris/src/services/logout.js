@@ -1,4 +1,4 @@
-import { authFetch } from './authFetch';
+import { authFetch } from '../hooks/authFetch';
 const API_URL = '/api';
 
 export const logoutUser = async () => {

@@ -1,0 +1,237 @@
+@import '../../styles/theme.css';
+
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--color-background);
+  padding: 20px;
+  padding-bottom: 10vh;
+}
+
+.logo {
+  width: 180px;
+  height: auto;
+  margin-bottom: 2rem;
+  animation: logoFloat 0.6s ease-out;
+  position: absolute;
+  top: 10vh;
+}
+
+@keyframes logoFloat {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-card {
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px var(--shadow-color);
+  width: 100%;
+  max-width: 400px;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center center;
+}
+
+/* Add different heights for login and signup states */
+.auth-card.signup {
+  transform: scale(1);
+}
+
+.auth-card.login {
+  transform: scaleY(1);
+}
+
+.auth-header {
+  position: relative;
+  height: 2.5rem;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.auth-header h2 {
+  color: var(--color-text-primary);
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 0;
+  margin: 0;
+  animation: slideInText 0.1s ease forwards;
+}
+
+.auth-header h2.exit {
+  animation: slideOutText 0.1s ease forwards;
+}
+
+@keyframes slideInText {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutText {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+  overflow: hidden;
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 80px;
+}
+
+.form-group.hidden {
+  margin-bottom: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+  max-height: 0;
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+input {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: var(--color-input);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--primary-glow);
+}
+
+input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+input.error {
+  border-color: var(--color-error);
+}
+
+input.error:focus {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 2px var(--error-glow);
+}
+
+.error-message {
+  color: var(--color-error);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.field-error {
+  color: var(--color-error);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  text-align: left;
+  animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color-primary);
+  color: var(--color-text-button);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+button.loading {
+  background-color: var(--color-primary-hover);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.toggle-mode {
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-top: 1.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.toggle-mode:hover {
+  color: var(--color-primary);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-group {
+  animation: slideIn 0.3s ease forwards;
+} 

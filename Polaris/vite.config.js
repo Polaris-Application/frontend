@@ -6,15 +6,16 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: 'localhost',
-    port: '8000',
-    open: 'true',
-    https: 'false',
+    port: 3000, // Changed frontend port to 3000
+    open: true, // Fixed boolean value
+    https: false, // Fixed boolean value
     strictPort: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: 'http://localhost:8000', // Backend remains on 8000
         changeOrigin: true,
-        rewrite: (path) => path.replace("/^\/api/, ''")
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
   }
