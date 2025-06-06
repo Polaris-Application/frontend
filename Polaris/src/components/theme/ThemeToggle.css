@@ -20,6 +20,14 @@
   outline: none;
 }
 
+.dashboard-theme-toggle {
+  position: static !important;
+  margin: 0 !important;
+  top: auto !important;
+  left: auto !important;
+  z-index: auto !important;
+}
+
 /* Remove focus outline for mouse users but keep it for keyboard navigation */
 .theme-toggle:focus {
   outline: none;

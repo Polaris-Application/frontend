@@ -14,8 +14,14 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:8000', // Backend remains on 8000
         changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, '')
+        secure: false
+      }
+    }
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: './index.html'
       }
     }
   }

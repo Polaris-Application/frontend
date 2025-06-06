@@ -1,8 +1,19 @@
 .dashboard {
   padding: 2rem;
-  background-color: #1a1a1a;
+  background-color: var(--color-background);
   min-height: 100vh;
-  color: white;
+  color: var(--color-text-primary);
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .dashboard-header {
@@ -11,28 +22,48 @@
   align-items: center;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid var(--color-border);
+  animation: fadeUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.dashboard h1{
+  margin-bottom: 0px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .dashboard h1 {
   font-size: 2rem;
   margin: 0;
-  color: #ffffff;
+  color: var(--color-text-primary);
+  animation: fadeUp 0.6s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+.header-actions > * {
+  animation: fadeUp 0.6s ease-out 0.4s forwards;
+  opacity: 0;
 }
 
 .logout-button {
-  background-color: #ef4444;
-  color: white;
+  background-color: var(--color-error);
+  color: var(--color-text-button);
   border: none;
+  margin-top: 0px;
   padding: 0.5rem 1rem;
   border-radius: 0.375rem;
   cursor: pointer;
   font-size: 0.875rem;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .logout-button:hover {
-  background-color: #dc2626;
+  background-color: var(--color-primary-hover);
 }
 
 .dashboard-content {
@@ -41,16 +72,20 @@
 }
 
 .dashboard-card {
-  background-color: #2d2d2d;
+  background-color: var(--color-surface);
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px var(--shadow-color);
+  animation: fadeUp 0.6s ease-out 0.6s forwards;
+  opacity: 0;
 }
 
 .dashboard-card h2 {
   margin: 0 0 1rem 0;
   font-size: 1.5rem;
-  color: #ffffff;
+  color: var(--color-text-primary);
+  animation: fadeUp 0.6s ease-out 0.8s forwards;
+  opacity: 0;
 }
 
 .stats-grid {
@@ -64,9 +99,18 @@
   flex-direction: column;
   align-items: center;
   padding: 1rem;
-  background-color: #333;
+  background-color: var(--color-input);
   border-radius: 8px;
   transition: transform 0.2s ease;
+  opacity: 0;
+}
+
+.stat-item:nth-child(1) {
+  animation: fadeUp 0.6s ease-out 1s forwards;
+}
+
+.stat-item:nth-child(2) {
+  animation: fadeUp 0.6s ease-out 1.2s forwards;
 }
 
 .stat-item:hover {
@@ -76,11 +120,11 @@
 .stat-value {
   font-size: 2rem;
   font-weight: bold;
-  color: #6366f1;
+  color: var(--color-primary);
 }
 
 .stat-label {
   margin-top: 0.5rem;
-  color: #9ca3af;
+  color: var(--color-text-secondary);
   font-size: 0.875rem;
 } 

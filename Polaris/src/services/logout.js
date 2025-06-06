@@ -1,8 +1,8 @@
 import { authFetch } from '../hooks/authFetch';
-const API_URL = '/api';
+import { API_ENDPOINTS } from '../config/api';
 
 export const logoutUser = async () => {
-  const response = await authFetch(`${API_URL}/get_user`, {
+  const response = await authFetch(API_ENDPOINTS.logout, {
     method: 'GET',
   });
 

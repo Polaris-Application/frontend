@@ -13,8 +13,9 @@ export const useAuth = () => {
     const initAuth = async () => {
       try {
         const accessToken = localStorage.getItem('access_token');
-        if (accessToken) {
-          const userData = await getCurrentUser();
+        const username = localStorage.getItem('username');
+        if (accessToken && username) {
+          const userData = await getCurrentUser(username);
           setUser(userData);
         }
       } catch (err) {
@@ -27,12 +28,13 @@ export const useAuth = () => {
     initAuth();
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (username, password) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await loginService(email, password);
-      const userData = await getCurrentUser();
+      const response = await loginService(username, password);
+      localStorage.setItem('username', username);
+      const userData = await getCurrentUser(username);
       setUser(userData);
       return { success: true };
     } catch (err) {
@@ -43,13 +45,13 @@ export const useAuth = () => {
     }
   };
 
-  const signup = async (email, password, confirmPassword, phoneNumber) => {
+  const signup = async (username, password, confirmPassword, phoneNumber) => {
     setLoading(true);
     setError(null);
     try {
-      await signupService(email, password, confirmPassword, phoneNumber);
+      await signupService(username, password, confirmPassword, phoneNumber);
       // After successful signup, log the user in
-      return await login(email, password);
+      return await login(username, password);
     } catch (err) {
       setError(err.message);
       return { success: false, error: err.message };
@@ -63,6 +65,7 @@ export const useAuth = () => {
     try {
       await logoutUser();
       setUser(null);
+      localStorage.removeItem('username');
     } catch (err) {
       console.error('Logout failed:', err);
     } finally {

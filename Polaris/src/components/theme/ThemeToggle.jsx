@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ThemeToggle.css';
 
-const ThemeToggle = () => {
+const ThemeToggle = ({ className = '' }) => {
   const [currentTheme, setCurrentTheme] = useState('dark');
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const ThemeToggle = () => {
 
   return (
     <button 
-      className="theme-toggle" 
+      className={`theme-toggle ${className}`}
       onClick={toggleTheme}
       aria-label={`Switch to ${currentTheme === 'dark' ? 'light' : 'dark'} theme`}
     >

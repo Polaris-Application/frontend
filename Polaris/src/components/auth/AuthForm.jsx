@@ -9,13 +9,13 @@ const AuthForm = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [headerText, setHeaderText] = useState('Login');
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
     confirmPassword: '',
     phoneNumber: ''
   });
   const [errors, setErrors] = useState({
-    email: '',
+    username: '',
     password: '',
     confirmPassword: '',
     phoneNumber: '',
@@ -33,17 +33,16 @@ const AuthForm = () => {
 
   const validateForm = () => {
     const newErrors = {
-      email: '',
+      username: '',
       password: '',
       confirmPassword: '',
       phoneNumber: '',
       general: ''
     };
 
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+    // Username validation
+    if (formData.username.length < 3) {
+      newErrors.username = 'Username must be at least 3 characters long';
     }
 
     // Password validation
@@ -57,9 +56,9 @@ const AuthForm = () => {
         newErrors.confirmPassword = 'Passwords do not match';
       }
 
-      const phoneRegex = /^[0-9]{10}$/;
+      const phoneRegex = /^[0-9]{11}$/;
       if (!phoneRegex.test(formData.phoneNumber)) {
-        newErrors.phoneNumber = 'Please enter a valid 10-digit phone number';
+        newErrors.phoneNumber = 'Please enter a valid 11-digit phone number';
       }
     }
 
@@ -76,9 +75,9 @@ const AuthForm = () => {
 
     try {
       const { success, error } = await (isLogin 
-        ? login(formData.email, formData.password)
+        ? login(formData.username, formData.password)
         : signup(
-            formData.email, 
+            formData.username, 
             formData.password, 
             formData.confirmPassword,
             formData.phoneNumber
@@ -117,13 +116,13 @@ const AuthForm = () => {
     handleHeaderAnimation();
     setIsLogin(!isLogin);
     setFormData({
-      email: '',
+      username: '',
       password: '',
       confirmPassword: '',
       phoneNumber: ''
     });
     setErrors({
-      email: '',
+      username: '',
       password: '',
       confirmPassword: '',
       phoneNumber: '',
@@ -144,14 +143,14 @@ const AuthForm = () => {
         <form onSubmit={handleSubmit} noValidate>
           <div className="form-group">
             <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={formData.username}
               onChange={handleInputChange}
-              className={errors.email ? 'error' : ''}
+              className={errors.username ? 'error' : ''}
             />
-            {errors.email && <div className="field-error">{errors.email}</div>}
+            {errors.username && <div className="field-error">{errors.username}</div>}
           </div>
           
           <div className="form-group">
@@ -198,7 +197,7 @@ const AuthForm = () => {
         </form>
 
         <p className="toggle-mode" onClick={toggleMode}>
-          {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Login'}
+          {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login"}
         </p>
       </div>
     </div>

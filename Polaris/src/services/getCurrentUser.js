@@ -1,8 +1,11 @@
 import { authFetch } from '../hooks/authFetch'
-const API_URL = '/api';
+import { API_ENDPOINTS } from '../config/api';
 
-export const getCurrentUser = async () => {
-  const response = await authFetch(`${API_URL}/get_user`, {
+export const getCurrentUser = async (username) => {
+  const queryParams = new URLSearchParams({ username });
+  const url = `${API_ENDPOINTS.getUser}?${queryParams}`;
+
+  const response = await authFetch(url, {
     method: 'GET',
   });
 
@@ -11,5 +14,5 @@ export const getCurrentUser = async () => {
   }
 
   const data = await response.json();
-  return data.user; 
+  return data.user;
 };
