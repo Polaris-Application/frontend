@@ -34,8 +34,8 @@ export const useAuth = () => {
     try {
       const response = await loginService(username, password);
       localStorage.setItem('username', username);
-      const userData = await getCurrentUser(username);
-      setUser(userData);
+      // const userData = await getCurrentUser(username);
+      setUser({ username: username});
       return { success: true };
     } catch (err) {
       setError(err.message);

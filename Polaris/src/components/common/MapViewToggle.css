@@ -1,0 +1,78 @@
+.map-view-toggle {
+  position: relative;
+  display: inline-flex;
+  border-radius: 9999px;
+  background-color: var(--color-input);
+  overflow: hidden;
+  border: 2px solid var(--color-background);
+}
+
+.toggle-option {
+  flex: 1 1 0;
+  margin-top: 0px;
+  position: relative;
+  padding: 0.4rem 1.2rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  z-index: 1;
+  transition: color 0.2s ease;
+}
+
+/* rounded corners per side */
+.toggle-option.heatmap {
+  border-radius: 9999px 0 0 9999px; /* left round */
+}
+
+.toggle-option.markers {
+  border-radius: 0 9999px 9999px 0; /* right round */
+}
+
+.toggle-option.selected {
+  color: var(--color-text-button) !important;
+}
+
+/* disable hover effect */
+.toggle-option:hover {
+  background: transparent;
+  color: inherit;
+}
+
+/* remove default focus outline */
+.toggle-option:focus,
+.toggle-option:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* highlight background for each option */
+.toggle-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-primary);
+  z-index: -1;
+}
+
+.toggle-bg.heatmap {
+  border-radius: 9999px 0 0 9999px; /* left round */
+}
+
+.toggle-bg.markers {
+  border-radius: 0 9999px 9999px 0; /* right round */
+}
+
+.toggle-label {
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .map-view-toggle {
+    width: 100%;
+  }
+}

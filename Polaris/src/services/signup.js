@@ -8,7 +8,6 @@ export const fetchUsers = async (username, password, confirm_password, phone_num
         'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-        username: username,
         password1: password,
         password2: confirm_password,
         phone_number: phone_number

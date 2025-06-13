@@ -2,7 +2,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuthContext } from './context/AuthContext';
 import AuthForm from './components/auth/AuthForm';
 import Dashboard from './components/dashboard/Dashboard';
+import Tests from './components/dashboard/Tests';
 import './App.css';
+import Navbar from './components/common/Navbar.jsx';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuthContext();
@@ -18,6 +20,7 @@ const App = () => {
   return (
     <AuthProvider>
       <Router>
+        <Navbar />
         <Routes>
           {/* Public routes */}
           <Route 
@@ -35,6 +38,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tests"
+            element={
+              <ProtectedRoute>
+                <Tests />
               </ProtectedRoute>
             }
           />

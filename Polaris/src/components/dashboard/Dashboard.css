@@ -60,10 +60,14 @@
   cursor: pointer;
   font-size: 0.875rem;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .logout-button:hover {
-  background-color: var(--color-primary-hover);
+  background-color: var(--color-error);
+  filter: brightness(1.1); /* subtle lift */
 }
 
 .dashboard-content {
@@ -127,4 +131,112 @@
   margin-top: 0.5rem;
   color: var(--color-text-secondary);
   font-size: 0.875rem;
+}
+
+/* Map styles */
+.leaflet-container {
+  border-radius: 8px;
+  z-index: 1;
+}
+
+.leaflet-control-container .leaflet-control {
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+.leaflet-popup-content-wrapper {
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  border-radius: 8px;
+}
+
+.leaflet-popup-tip {
+  background-color: var(--color-surface);
+}
+
+.heat-map-info {
+  margin: -0.5rem 0 1rem;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+/* Map header flex */
+.map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.map-settings-button{
+  background: transparent;
+  border: none;
+  width: 32px;
+  height: auto;
+  margin-top: 0;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0px;
+  background: transparent;
+}
+
+.map-settings-button:hover{
+  background: transparent;
+}
+
+.map-settings-button:focus{
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+}
+
+.map-update-button{
+  background: transparent;
+  border: none;
+  width: 32px;
+  height: auto;
+  margin-top: 0;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0px;
+  background: transparent;
+}
+
+.map-update-button:hover{
+  background: transparent;
+}
+
+.map-update-button:focus{
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+}
+
+.map-button-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+
+@media (max-width: 640px) {
+  .map-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    text-align: center;
+  }
+}
+
+.toggle-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 30%;
+}
+
+@media (max-width: 640px) {
+  .toggle-stack {
+    width: 100%;
+  }
 } 
