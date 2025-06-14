@@ -22,18 +22,18 @@ const getDistance = (latlng, point) => {
 const findNearestPoint = (latlng, points) => {
   let nearest = null;
   let minDist = Infinity;
-  points.forEach((point) => {
+  points.forEach((point, idx) => {
     const dist = getDistance(latlng, point);
     if (dist < minDist) {
       minDist = dist;
-      nearest = point;
+      nearest = [point, idx];
     }
   });
   return nearest;
 };
 
 // Create popup content
-const createPopupContent = (point, rawData) => {
+const createPopupContent = (point, rawData, qualityLabel = null, powerLabel = null) => {
   // point: [lat, lng, value], rawData: original object
   if (!rawData) {
     // fallback to old behavior
@@ -66,12 +66,12 @@ const createPopupContent = (point, rawData) => {
       Band: ${rawData.band}<br/>
       ARFCN: ${rawData.arfcn}<br/>
       Network: ${rawData.network_type}<br/>
-      Power: ${rawData.power}<br/>
+      Power: ${rawData.power} ${powerLabel ? "(" + powerLabel + ")" : ""}<br/>
       RSRP: ${rawData.rsrp}<br/>
       RSRQ: ${rawData.rsrq}<br/>
       RSSI: ${rawData.rssi}<br/>
       RSCP: ${rawData.rscp}<br/>
-      Quality: ${rawData.quality}<br/>
+      Quality: ${rawData.quality} ${qualityLabel ? "(" + qualityLabel + ")" : ""}<br/>
       ----------------------<br/>
     </div>
   `;
@@ -87,25 +87,34 @@ const getValueForMode = (data, mode) => {
   return 0;
 };
 
-const createGradientFromConfig = (cfg) => {
-  if (!cfg || !cfg.bands || cfg.bands.length === 0) return null;
+const createGradientFromConfig = (bands) => {
+  if (!bands || bands.length === 0) return null;
   // Map band value ranges to gradient stops (0-1), but keep color mapping by value in getBandColour
-  const entries = cfg.bands.map((b, i) => {
-    const ratio = i / (cfg.bands.length - 1);
+  const entries = bands.map((b, i) => {
+    const ratio = i / (bands.length - 1);
     return [ratio, b.colour];
   });
   return Object.fromEntries(entries);
 };
 
-const getBandColour = (val, cfg) => {
+const getBandColour = (val, colorMode, cfg) => {
   if (!cfg) return undefined;
-  const band = cfg.bands.find((b) => val >= b.from && val < b.to) || cfg.bands[cfg.bands.length - 1];
-  return band?.colour;
+  const band = cfg.mode[colorMode].find((b) => val >= b.from && val < b.to) || cfg.mode[colorMode][cfg.mode[colorMode].length - 1];
+  return [band?.colour];
+};
+
+const getBandLabel = (data, cfg) => {
+  if (!cfg) return undefined;
+  const power = data.power !== null ? parseFloat(data.power) : 0;
+  const quality = data.quality !== null ? parseFloat(data.quality) : 0;
+  const powerLabel = cfg.mode["power"].find((b) => power >= b.from && power < b.to) || cfg.mode["power"][cfg.mode["power"].length - 1]
+  const qualityLabel = cfg.mode["quality"].find((b) => quality >= b.from && quality < b.to) || cfg.mode["quality"][cfg.mode["quality"].length - 1]
+  return [powerLabel?.label, qualityLabel?.label];
 };
 
 const HeatmapLayer = ({ points, rawDataList, colorMode, colourConfig }) => {
   const map = useMap();
-  const gradientFromConfig = useMemo(() => createGradientFromConfig(colourConfig), [colourConfig]);
+  const gradientFromConfig = useMemo(() => createGradientFromConfig(colourConfig.mode[colorMode]), [colourConfig, colorMode]);
 
   useEffect(() => {
     if (!map || !points.length) return;
@@ -140,11 +149,12 @@ const HeatmapLayer = ({ points, rawDataList, colorMode, colourConfig }) => {
       isHeatmap: true,
     }).addTo(map);
     const handleClick = (e) => {
-      const nearestPoint = findNearestPoint(e.latlng, points);
+      const [nearestPoint, idx] = findNearestPoint(e.latlng, points);
+      const [powerLabel, qualityLabel] = getBandLabel(rawDataList[idx], colourConfig)
       if (nearestPoint && getDistance(e.latlng, nearestPoint) < 0.001) {
         L.popup()
           .setLatLng([nearestPoint[0], nearestPoint[1]])
-          .setContent(createPopupContent(nearestPoint))
+          .setContent(createPopupContent(nearestPoint, rawDataList[idx], qualityLabel, powerLabel))
           .openOn(map);
       }
     };
@@ -161,15 +171,16 @@ const HeatmapLayer = ({ points, rawDataList, colorMode, colourConfig }) => {
 const MarkersLayer = ({ points, colorMode, colourConfig, rawDataList }) => {
   const getColor = (val) => {
     if (colourConfig) {
-      return getBandColour(val, colourConfig);
+      return getBandColour(val, colorMode, colourConfig);
     }
-    return '#00ff00'; // fallback
+    return ['#00ff00', 'No Label']; // fallback
   };
   return (
     <>
       {points.map(([lat, lng, value], idx) => {
         const color = getColor(value);
         const rawData = rawDataList && rawDataList[idx];
+        const [powerLabel, qualityLabel] = getBandLabel(rawData, colourConfig); 
         return (
           <CircleMarker
             key={idx}
@@ -178,7 +189,7 @@ const MarkersLayer = ({ points, colorMode, colourConfig, rawDataList }) => {
             pathOptions={{ color, fillColor: color, fillOpacity: 0.8 }}
           >
             <Popup>
-              <div dangerouslySetInnerHTML={{ __html: createPopupContent([lat, lng, value], rawData) }} />
+              <div dangerouslySetInnerHTML={{ __html: createPopupContent([lat, lng, value], rawData, qualityLabel, powerLabel) }} />
             </Popup>
           </CircleMarker>
         );
@@ -192,7 +203,7 @@ const Map = ({
   zoom = 15,
   height = '400px',
   width = '100%',
-  view = 'heatmap', // 'heatmap' | 'markers'
+  view = 'markers', // 'heatmap' | 'markers'
   colorMode = 'power', // 'power' | 'quality'
   colourConfig = null,
   marginTop = '0px', // margin-top for the map container
@@ -211,7 +222,6 @@ const Map = ({
   }, [locationData, colorMode]);
   return (
     <div style={{ height, width, marginTop }}>
-      {loading && <div>Loading map data...</div>}
       {error && <div style={{ color: 'red' }}>Error: {error}</div>}
       <MapContainer
         center={center}

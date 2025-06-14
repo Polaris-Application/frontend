@@ -6,20 +6,12 @@ import AddBandButton from './AddBandButton';
 import { defaultBandsByMode } from './BandsTable';
 import './ColourConfigurator.css';
 
-const ColourConfigurator = ({ mode, bands, onApply, onClose }) => {
+const ColourConfigurator = ({currentConfig, onApply, onClose }) => {
   // Store separate configs for each mode
-  const [modeBands, setModeBands] = useState({
-    strength: mode === 'strength' ? bands : defaultBandsByMode.strength,
-    quality: mode === 'quality' ? bands : defaultBandsByMode.quality,
-  });
-  const [draftConfig, setDraftConfig] = useState({ mode, bands, refreshTime: 10 });
-  const [errors, setErrors] = useState([]);
+  const [editMode, setEditMode] = useState("power") 
 
-  // Only update draftConfig when mode changes from parent (not on every modeBands change)
-  useEffect(() => {
-    setDraftConfig((c) => ({ ...c, mode, bands: modeBands[mode] }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode]);
+  const [draftConfig, setDraftConfig] = useState(currentConfig);
+  const [errors, setErrors] = useState([]);
 
   useEffect(() => {
     setErrors(validateConfig(draftConfig));
@@ -27,13 +19,17 @@ const ColourConfigurator = ({ mode, bands, onApply, onClose }) => {
 
   // When mode changes, save current bands to previous mode, switch to new mode's bands
   const handleModeChange = (m) => {
-    setModeBands((prev) => ({ ...prev, [draftConfig.mode]: draftConfig.bands }));
-    setDraftConfig((c) => ({ ...c, mode: m, bands: modeBands[m] || defaultBandsByMode[m] }));
+    setEditMode(m);
   };
 
   const handleBandsChange = (newBands) => {
-    setDraftConfig((c) => ({ ...c, bands: newBands }));
-    setModeBands((prev) => ({ ...prev, [draftConfig.mode]: newBands }));
+    setDraftConfig((c) => ({
+      ...c,
+      mode: {
+        ...c.mode,
+        [editMode]: newBands,
+      },
+    }));
   };
 
   const handleRefreshTimeChange = (e) => {
@@ -42,8 +38,13 @@ const ColourConfigurator = ({ mode, bands, onApply, onClose }) => {
   };
 
   const handleReset = () => {
-    setDraftConfig((c) => ({ ...c, bands: defaultBandsByMode[draftConfig.mode] }));
-    setModeBands((prev) => ({ ...prev, [draftConfig.mode]: defaultBandsByMode[draftConfig.mode] }));
+    setDraftConfig((c) => ({
+      ...c,
+      mode: {
+        ...c.mode,
+        [editMode]: defaultBandsByMode[editMode],
+      },
+    }));
   };
 
   const handleApply = () => {
@@ -80,19 +81,21 @@ const ColourConfigurator = ({ mode, bands, onApply, onClose }) => {
 
       <div className="config-section">
         <h4>Mode</h4>
-        <ModeSelector value={draftConfig.mode} onChange={handleModeChange} />
+        <ModeSelector value={editMode} onChange={handleModeChange} />
       </div>
 
       <div className="config-section">
         <h4>Bands</h4>
-        <BandsTable bands={draftConfig.bands} onChange={handleBandsChange} />
-        <AddBandButton bands={draftConfig.bands} onChange={handleBandsChange} />
+        <BandsTable cfg={draftConfig} editMode={editMode} onChange={handleBandsChange} />
+        <AddBandButton cfg={draftConfig} editMode={editMode} onChange={handleBandsChange} />
       </div>
 
       {errors.length > 0 && (
         <div className="config-errors">
           <ul>
-            {errors.map((e, i) => (
+            {errors
+            .filter(([mode, e], _) => mode == editMode)
+            .map(([_, e], i) => (
               <li key={i}>{e}</li>
             ))}
           </ul>

@@ -20,7 +20,6 @@ const App = () => {
   return (
     <AuthProvider>
       <Router>
-        <Navbar />
         <Routes>
           {/* Public routes */}
           <Route 
@@ -37,6 +36,7 @@ const App = () => {
             path="/dashboard"
             element={
               <ProtectedRoute>
+                <Navbar />
                 <Dashboard />
               </ProtectedRoute>
             }
@@ -45,6 +45,7 @@ const App = () => {
             path="/tests"
             element={
               <ProtectedRoute>
+                <Navbar />
                 <Tests />
               </ProtectedRoute>
             }

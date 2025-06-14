@@ -1,7 +1,8 @@
 import React from 'react';
 
-const BandsTable = ({ bands, onChange }) => {
+const BandsTable = ({ cfg, editMode, onChange }) => {
   // Ensure bands are continuous: when one changes, update adjacent
+  const bands = cfg.mode[editMode]
   const handleChange = (idx, field, value) => {
     let newBands = bands.map((b, i) => ({ ...b }));
     if (field === 'from') {
@@ -80,13 +81,13 @@ const BandsTable = ({ bands, onChange }) => {
 
 // Helper for default bands per mode
 const defaultBandsByMode = {
-  strength: [
+  "power": [
     { from: 0, to: 40, colour: '#00ff00', label: 'Excellent' },
     { from: 40, to: 60, colour: '#ffff00', label: 'Good' },
     { from: 60, to: 80, colour: '#ff9900', label: 'Fair' },
     { from: 80, to: 100, colour: '#ff0000', label: 'Poor' },
   ],
-  quality: [
+  "quality": [
     { from: 0, to: 40, colour: '#00ff7f', label: 'Very Good' },
     { from: 40, to: 60, colour: '#ffd633', label: 'Good' },
     { from: 60, to: 80, colour: '#ff9900', label: 'Fair' },

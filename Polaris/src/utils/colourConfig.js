@@ -2,31 +2,35 @@
 
 /** Validate a configuration object.
  *  Returns an array of human-readable error messages. Empty array ⇒ valid. */
+import { defaultBandsByMode } from "../components/ColourConfigurator/BandsTable";
+
 export function validateConfig(cfg) {
   const errors = [];
-
-  if (!cfg.bands || cfg.bands.length < 2) {
-    errors.push('At least two colour bands are required.');
-    return errors;
-  }
-
-  // Ensure bands are in ascending order (by `from`)
-  const sorted = [...cfg.bands].sort((a, b) => a.from - b.from);
-  sorted.forEach((band, idx) => {
-    const { from, to, colour } = band;
-    if (from >= to) {
-      errors.push(`Band ${idx + 1} has invalid range (from >= to).`);
+  for (const activeMode in cfg.mode){
+    const bands = cfg.mode[activeMode]
+    if (!bands || bands.length < 2) {
+      errors.push([activeMode, 'At least two colour bands are required.']);
+      return errors;
     }
-    if (!/^#([0-9a-fA-F]{6})$/.test(colour)) {
-      errors.push(`Band ${idx + 1} has invalid colour value.`);
-    }
-    if (idx < sorted.length - 1) {
-      const next = sorted[idx + 1];
-      if (to !== next.from) {
-        errors.push(`Gap/overlap between bands ${idx + 1} and ${idx + 2}.`);
+  
+    // Ensure bands are in ascending order (by `from`)
+    const sorted = [...bands].sort((a, b) => a.from - b.from);
+    sorted.forEach((band, idx) => {
+      const { from, to, colour } = band;
+      if (from >= to) {
+        errors.push([activeMode, `Band ${idx + 1} has invalid range (from >= to).`]);
       }
-    }
-  });
+      if (!/^#([0-9a-fA-F]{6})$/.test(colour)) {
+        errors.push([activeMode, `Band ${idx + 1} has invalid colour value.`]);
+      }
+      if (idx < sorted.length - 1) {
+        const next = sorted[idx + 1];
+        if (to !== next.from) {
+          errors.push([activeMode, `Gap/overlap between bands ${idx + 1} and ${idx + 2}.`]);
+        }
+      }
+    });
+  }
 
   return errors;
 }
@@ -48,5 +52,12 @@ export function generateDefaultConfig() {
     { from: 60, to: 80, colour: '#ff9900', label: 'Fair' },
     { from: 80, to: 100, colour: '#ff0000', label: 'Poor' },
   ];
-  return { mode: 'strength', bands };
+  return { 
+    mode: 
+      {
+        "quality": defaultBandsByMode["quality"],
+        "power": defaultBandsByMode["power"],
+      },
+    refreshTime: 10 
+  };
 } 

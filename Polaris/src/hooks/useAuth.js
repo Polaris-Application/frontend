@@ -15,8 +15,8 @@ export const useAuth = () => {
         const accessToken = localStorage.getItem('access_token');
         const username = localStorage.getItem('username');
         if (accessToken && username) {
-          const userData = await getCurrentUser(username);
-          setUser(userData);
+          //const userData = await getCurrentUser(username);
+          setUser({ username: username});
         }
       } catch (err) {
         console.error('Auth initialization failed:', err);

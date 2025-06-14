@@ -3,7 +3,7 @@ import { LayoutGroup, motion } from 'framer-motion';
 import './ModeSelector.css';
 
 const options = [
-  { label: 'Strength', val: 'strength' },
+  { label: 'Strength', val: 'power' },
   { label: 'Quality', val: 'quality' },
 ];
 

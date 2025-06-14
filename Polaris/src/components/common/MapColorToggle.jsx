@@ -3,7 +3,7 @@ import { motion, LayoutGroup } from 'framer-motion';
 import './MapViewToggle.css';
 
 const options = [
-  { label: 'Strength', val: 'strength' },
+  { label: 'Strength', val: 'power' },
   { label: 'Quality', val: 'quality' },
 ];
 

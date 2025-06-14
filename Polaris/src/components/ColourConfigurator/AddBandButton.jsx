@@ -1,7 +1,8 @@
 import React from 'react';
 import { splitBand } from '../../utils/colourConfig.js';
 
-const AddBandButton = ({ bands, onChange }) => {
+const AddBandButton = ({ cfg, editMode, onChange }) => {
+  const bands =  cfg.mode[editMode];
   const handleAdd = () => {
     if (!bands.length) return;
     // Find band with largest range

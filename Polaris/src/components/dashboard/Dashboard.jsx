@@ -71,6 +71,7 @@ const Dashboard = () => {
   // State for heat map points with random values
   const [heatMapPoints, setHeatMapPoints] = useState(createPathPoints());
 
+  const [colorMode, setColorMode] = useState("power")
   // Example mobile / event counts that increment over time to showcase animation
   const [mobileCount, setMobileCount] = useState(5);
   const [eventCount, setEventCount] = useState(1200);
@@ -156,11 +157,9 @@ const Dashboard = () => {
             <div className="toggle-stack">
               <MapViewToggle value={mapView} onChange={setMapView} />
               <MapColorToggle
-                value={colourConfig.mode}
+                value={colorMode}
                 onChange={(mode) => {
-                  const updated = { ...colourConfig, mode };
-                  setColourConfig(updated);
-                  saveConfig(updated);
+                  setColorMode(mode)
                 }}
               />
               <div className='map-button-container'>
@@ -212,8 +211,7 @@ const Dashboard = () => {
                 style={{ overflow: 'hidden' }}
               >
                 <ColourConfigurator
-                  mode={colourConfig.mode}
-                  bands={colourConfig.bands}
+                  currentConfig={colourConfig}
                   onApply={handleApplyConfig}
                   onClose={() => setShowConfigurator(false)}
                 />
@@ -228,7 +226,7 @@ const Dashboard = () => {
             center={[centerLat, centerLng]}
             zoom={16} // Increased zoom to better see the concentrated points
             view={mapView}
-            colorMode={colourConfig.mode}
+            colorMode={colorMode}
             colourConfig={colourConfig}
           />
         </div>
