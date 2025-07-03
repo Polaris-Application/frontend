@@ -9,14 +9,16 @@ const AuthForm = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [headerText, setHeaderText] = useState('Login');
   const [formData, setFormData] = useState({
-    phoneNumber: '',
-    password: '',
-    confirmPassword: ''
-  });
-  const [errors, setErrors] = useState({
-    phoneNumber: '',
+    username: '',
     password: '',
     confirmPassword: '',
+    phoneNumber: ''
+  });
+  const [errors, setErrors] = useState({
+    username: '',
+    password: '',
+    confirmPassword: '',
+    phoneNumber: '',
     general: ''
   });
   const { login, signup, loading } = useAuthContext();
@@ -26,21 +28,21 @@ const AuthForm = () => {
     setTimeout(() => {
       setHeaderText(isLogin ? 'Sign Up' : 'Login');
       setIsAnimating(false);
-    }, 300);
+    }, 300); // Match this with the CSS animation duration
   };
 
   const validateForm = () => {
     const newErrors = {
-      phoneNumber: '',
+      username: '',
       password: '',
       confirmPassword: '',
+      phoneNumber: '',
       general: ''
     };
 
-    // Phone number validation (required for both login and signup)
-    const phoneRegex = /^[0-9]{11}$/;
-    if (!phoneRegex.test(formData.phoneNumber)) {
-      newErrors.phoneNumber = 'Please enter a valid 11-digit phone number';
+    // Username validation
+    if (formData.username.length < 3) {
+      newErrors.username = 'Username must be at least 3 characters long';
     }
 
     // Password validation
@@ -53,6 +55,11 @@ const AuthForm = () => {
       if (formData.password !== formData.confirmPassword) {
         newErrors.confirmPassword = 'Passwords do not match';
       }
+
+      const phoneRegex = /^[0-9]{11}$/;
+      if (!phoneRegex.test(formData.phoneNumber)) {
+        newErrors.phoneNumber = 'Please enter a valid 11-digit phone number';
+      }
     }
 
     setErrors(newErrors);
@@ -61,18 +68,22 @@ const AuthForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (!validateForm()) {
       return;
     }
+
     try {
-      const { success, error } = await (isLogin
-        ? login(formData.phoneNumber, formData.password)
+      const { success, error } = await (isLogin 
+        ? login(formData.username, formData.password)
         : signup(
-            formData.phoneNumber,
-            formData.password,
-            formData.confirmPassword
+            formData.username, 
+            formData.password, 
+            formData.confirmPassword,
+            formData.phoneNumber
           )
       );
+
       if (!success && error) {
         setErrors(prev => ({
           ...prev,
@@ -93,6 +104,7 @@ const AuthForm = () => {
       ...prev,
       [name]: value
     }));
+    // Clear error when user starts typing
     setErrors(prev => ({
       ...prev,
       [name]: '',
@@ -104,14 +116,16 @@ const AuthForm = () => {
     handleHeaderAnimation();
     setIsLogin(!isLogin);
     setFormData({
-      phoneNumber: '',
-      password: '',
-      confirmPassword: ''
-    });
-    setErrors({
-      phoneNumber: '',
+      username: '',
       password: '',
       confirmPassword: '',
+      phoneNumber: ''
+    });
+    setErrors({
+      username: '',
+      password: '',
+      confirmPassword: '',
+      phoneNumber: '',
       general: ''
     });
   };
@@ -129,15 +143,16 @@ const AuthForm = () => {
         <form onSubmit={handleSubmit} noValidate>
           <div className="form-group">
             <input
-              type="tel"
-              name="phoneNumber"
-              placeholder="Phone Number"
-              value={formData.phoneNumber}
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={formData.username}
               onChange={handleInputChange}
-              className={errors.phoneNumber ? 'error' : ''}
+              className={errors.username ? 'error' : ''}
             />
-            {errors.phoneNumber && <div className="field-error">{errors.phoneNumber}</div>}
+            {errors.username && <div className="field-error">{errors.username}</div>}
           </div>
+          
           <div className="form-group">
             <input
               type="password"
@@ -149,6 +164,7 @@ const AuthForm = () => {
             />
             {errors.password && <div className="field-error">{errors.password}</div>}
           </div>
+
           <div className={`form-group ${isLogin ? 'hidden' : ''}`}>
             <input
               type="password"
@@ -160,11 +176,26 @@ const AuthForm = () => {
             />
             {errors.confirmPassword && <div className="field-error">{errors.confirmPassword}</div>}
           </div>
+
+          <div className={`form-group ${isLogin ? 'hidden' : ''}`}>
+            <input
+              type="tel"
+              name="phoneNumber"
+              placeholder="Phone Number"
+              value={formData.phoneNumber}
+              onChange={handleInputChange}
+              className={errors.phoneNumber ? 'error' : ''}
+            />
+            {errors.phoneNumber && <div className="field-error">{errors.phoneNumber}</div>}
+          </div>
+
           {errors.general && <div className="error-message">{errors.general}</div>}
+
           <button type="submit" disabled={loading} className={loading ? 'loading' : ''}>
             {loading ? 'Loading...' : (isLogin ? 'Login' : 'Sign Up')}
           </button>
         </form>
+
         <p className="toggle-mode" onClick={toggleMode}>
           {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login"}
         </p>

@@ -61,3 +61,34 @@ export function generateDefaultConfig() {
     refreshTime: 10 
   };
 } 
+
+export function getColor() {
+    const choices = 
+    [
+      '#00FFFF',
+      '#39FF14',
+      '#FF007F',
+      '#FF5F1F',
+      '#9D00FF',
+      '#FFFF33',
+      '#1DE9B6',
+      '#FF2400',
+      '#58427C',
+      '#00BFFF'
+    ];
+    const index = Math.floor(Math.random() * choices.length);
+    return choices[index];
+}
+
+
+export function getColorsForPie(n){
+  const colors = [];
+  const saturation = 85;
+  const lightness = 60;
+  for (let i = 0; i < n; i++){
+    const hue = Math.floor((360 / n) * i);
+    colors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
+  }
+
+  return colors;
+}

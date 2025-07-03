@@ -4,6 +4,7 @@
   --color-background: #1a1a1a;
   --color-surface: #2d2d2d;
   --color-input: #3d3d3d;
+  --color-input-dark: #232526;
   --color-border: #4d4d4d;
   
   /* Text Colors */
@@ -44,6 +45,7 @@ body {
   --color-background: #ffffff;
   --color-surface: #ffffff;
   --color-input: #f8f8f8;
+  --color-input-dark: rgb(134, 142, 146);
   --color-border: #e5e5e5;
   --color-text-primary: #1a1a1a;
   --color-text-secondary: #666666;

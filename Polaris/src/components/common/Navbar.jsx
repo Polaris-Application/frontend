@@ -4,13 +4,14 @@ import { useAuthContext } from '../../context/AuthContext';
 import ThemeToggle from '../theme/ThemeToggle';
 import logoImg from '../../assets/polaris-logo-withouttext.png';
 import './Navbar.css';
+import UserInfo from './UserInfo';
 
 const Navbar = () => {
   const { user, logout } = useAuthContext();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-
-  //if (!user) return null; // don't show navbar for public pages
+  console.log(user)
+  if (!user) return null; // don't show navbar for public pages
 
   const handleNav = (path) => {
     navigate(path);
@@ -20,10 +21,13 @@ const Navbar = () => {
   return (
     <header className="navbar">
       <div className="navbar-container">
-        <Link to="/dashboard" className="navbar-brand">
-          <img src={logoImg} alt="Polaris logo" className="navbar-logo" />
-          <span className="brand-text">Polaris</span>
-        </Link>
+        <div className='navbar-generalInfo'>
+          <Link to="/dashboard" className="navbar-brand">
+            <img src={logoImg} alt="Polaris logo" className="navbar-logo" />
+            <span className="brand-text">Polaris</span>
+          </Link>
+          <UserInfo user={user}/>
+        </div>
 
         <button
           className={`burger ${open ? 'open' : ''}`}
@@ -36,8 +40,9 @@ const Navbar = () => {
         </button>
 
         <nav className={`nav-links ${open ? 'show' : ''}`}>
-          <Link to="/dashboard" onClick={() => handleNav('/dashboard')}>Dashboard</Link>
-          <Link to="/tests" onClick={() => handleNav('/tests')}>Tests</Link>
+          <Link className='navbar-link' to="/dashboard" onClick={() => handleNav('/dashboard')}>Map</Link>
+          <Link className='navbar-link' to="/tests" onClick={() => handleNav('/tests')}>Tests</Link>
+          <Link className='navbar-link' to="/analytics" onClick={() => handleNav('/analytics')}>Analytics</Link>
           {/* Future links go here */}
           <ThemeToggle />
           <button className="logout-button" onClick={logout} aria-label="Logout">

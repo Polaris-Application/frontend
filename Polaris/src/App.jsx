@@ -1,10 +1,11 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuthContext } from './context/AuthContext';
 import AuthForm from './components/auth/AuthForm';
-import Dashboard from './components/dashboard/Dashboard';
-import Tests from './components/dashboard/Tests';
 import './App.css';
 import Navbar from './components/common/Navbar.jsx';
+import MapPage from './components/pages/MapPage.jsx';
+import TestsPage from './components/pages/TestsPage.jsx';
+import AnalyticsPage from './components/pages/AnalyticsPage.jsx';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuthContext();
@@ -20,6 +21,7 @@ const App = () => {
   return (
     <AuthProvider>
       <Router>
+        <Navbar/>
         <Routes>
           {/* Public routes */}
           <Route 
@@ -36,8 +38,7 @@ const App = () => {
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <Navbar />
-                <Dashboard />
+                <MapPage />
               </ProtectedRoute>
             }
           />
@@ -45,11 +46,18 @@ const App = () => {
             path="/tests"
             element={
               <ProtectedRoute>
-                <Navbar />
-                <Tests />
+                <TestsPage />
               </ProtectedRoute>
             }
           />
+
+          <Route 
+            path='/analytics'
+            element={
+              <ProtectedRoute>
+                <AnalyticsPage />
+              </ProtectedRoute>
+            }/>
 
           {/* Redirect root to login */}
           <Route
@@ -62,6 +70,7 @@ const App = () => {
             path="*"
             element={<Navigate to="/login" replace />}
           />
+
         </Routes>
       </Router>
     </AuthProvider>

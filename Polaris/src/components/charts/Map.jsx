@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import './Map.css';
 import L from 'leaflet';
 import 'leaflet.heat';
-import { useLocationData } from '../../hooks/useLocationData';
+import { useLocationData } from '../../hooks/dataHooks/useLocationData';
 
 // A dedicated component to render / update the heat-map layer. Using a child
 // component lets us grab the Leaflet map instance via the `useMap` hook instead

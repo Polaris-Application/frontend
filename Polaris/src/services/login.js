@@ -1,6 +1,6 @@
 import { API_ENDPOINTS } from '../config/api';
 
-export const fetchUsers = async (phone_number, password) => {
+export const fetchUsers = async (username, password) => {
   const response = 
   await fetch(API_ENDPOINTS.login, {
     method: 'POST', 
@@ -8,7 +8,7 @@ export const fetchUsers = async (phone_number, password) => {
         'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-        phone_number: phone_number,
+        phone_number: username,
         password: password,
     })
   });
