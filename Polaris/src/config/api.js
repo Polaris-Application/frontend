@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
     getUser: `${API_BASE_URL}/authentication/get_user/`,
     logout: `${API_BASE_URL}/authentication/logout/`,
     locationData: `${API_BASE_URL}/mobile/list-location-data/`
+
 };
 
 export default API_ENDPOINTS;

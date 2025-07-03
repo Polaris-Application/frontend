@@ -1,6 +1,6 @@
 import { API_ENDPOINTS } from '../config/api';
 
-export const fetchUsers = async (username, password, confirm_password, phone_number) => {
+export const fetchUsers = async (phone_number, password, confirm_password) => {
   const response = 
   await fetch(API_ENDPOINTS.signup, {
     method: 'POST', 
